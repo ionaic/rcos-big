@@ -1,0 +1,230 @@
+#ifndef _ARGUMENTS_H_
+#define _ARGUMENTS_H_
+#include <stdlib.h>
+#include <iostream>
+#include "big.h"
+
+#define NUM_FLAGS 15
+#define h_flag 0 // help
+#define c_flag 1 // include config
+#define x_flag 2 // exclude config
+#define p_flag 3 // include package
+#define e_flag 4 // exclude package
+#define offline_flag 5 // store locally
+#define s_flag 6 // set temporarily
+#define f_flag 7 // find configs
+#define findprog_flag 8 // find programs not in package manager
+#define l_flag 9 // add to latest
+#define u_flag 10 // update specified archive
+#define noconf_flag 11 // store no configs
+#define nopack_flag 12 // store no packages
+#define v_flag 13 // verbose
+#define silent_flag 14 // run silent
+
+// parse the arguments for the program
+class Arguments {
+    public:
+        // constructors
+        //Arguments() {}
+        //Arguments(int argc, char** argv) {
+        //    parseArgs(argc, argv);
+        //}
+
+        int parseArgs(int argc, char** argv) {
+            #define is_f(arg) (arg[0] == '-')
+            int i = 1;
+
+            // test what mode, storing, unpacking, setting or other
+            if (argv[0] == "bang") {
+                // unpacking/installing/script creation
+                //sscanf();
+                _mode = 1;
+                if (i < argc) {
+                    if (!is_f(argv[i])) {
+                        if (this->verbose()) { std::cerr << "No archive location given, using location from config." << std::endl; }
+                        
+                    }
+                }
+            }
+            else if (argv[0] == "crunch") {
+                // storing/archive creation
+                _mode = 2;
+            }
+            else if (argv[0] == "set") {
+                // store setting to config file
+                _mode = 3;
+                for (; i < argc; ++i) {
+                    if (is_f(argv[i])) {
+                        --i;
+                        break;
+                    }
+                }
+            }
+            else {
+                _mode = 0;
+            }
+            #define f1(a) (argv[i] == a)
+            #define f2(a,b) (argv[i] == a || argv[i] == b)
+            #define tru(flag) (this->_flags[flag] = 1)
+            #define fal(flag) (this->_flags[flag] = 0)
+            for (; i < argc; ++i) {
+                //if (argv[i] == "-h" || argv[i] == "--help") {
+                if (f2("-h", "--help")) {
+                    // help text
+                    //this->_flags[h_flag] = 1; 
+                    tru(h_flag);
+                }
+                //else if (argv[i] == "--offline") {
+                else if (f1("--offline")) {
+                    // offline mode
+                    //this->flags[offline_flag] = 1;
+                    tru(offline_flag);
+                }
+                //else if (argv[i] == "-c" || argv[i] == "--include-config") {
+                else if (f2("-c", "--include-config")) {
+                    // include specified config file
+                    tru(c_flag);
+                    for (; i < argc; ++i) {
+                        //if (argv[i][0] == '-') {
+                        if (is_f(argv[i])) {
+                            --i;
+                            break;
+                        }
+                        this->_i_config.push_back(argv[i]);
+                    }
+                }
+                //else if (argv[i] == "-x" || argv[i] == "--exclude-config") {
+                else if (f2("-x", "--exclude-config")) {
+                    // exclude specified config file
+                    tru(x_flag);
+                    for (; i < argc; ++i) {
+                        if (is_f(argv[i])) {
+                            --i;
+                            break;
+                        }
+                        this->_e_config.push_back(argv[i]);
+                    }
+                }
+                else if (f2("-p", "--include--package")) {
+                    // include specified packages
+                    tru(p_flag);
+                    for (; i < argc; ++i) {
+                        if (is_f(argv[i])) {
+                            --i;
+                            break;
+                        }
+                        this->_i_packages.push_back(argv[i]);
+                    }
+                }
+                else if (f2("-e", "--exclude-package")) {
+                    // exclude specified packages
+                    tru(e_flag);
+                    for (; i < argc; ++i) {
+                        if (is_f(argv[i])) {
+                            --i;
+                            break;
+                        }
+                        this->_e_packages.push_back(argv[i]);
+                    }
+                }
+                else if (f2("-s", "--set")) {
+                    // set temporarily
+                    tru(s_flag);
+                    for (; i < argc; ++i) {
+                        //if (argv[i][0] == '-') {
+                        if (is_f(argv[i])) {
+                            --i;
+                            break;
+                        }
+                        this->_temp_set.push_back(argv[i]);
+                    }
+                }
+                else if (f2("-f", "--find-config")) {
+                    // find configs
+                    
+                    // if there is a next argument, grab it
+                    if (i < argc - 1) ++i;
+                    else continue;
+                    // set it as true 
+                    if (argv[i] == "false") fal(f_flag);
+                    else tru(f_flag);
+                    
+                }
+                else if (f1("--find-programs")) {
+                    // find programs
+
+                    // if there is a next argument, grab it
+                    if (i < argc - 1) ++i;
+                    else continue;
+                    // set it as true 
+                    if (argv[i] == "false") fal(findprog_flag);
+                    else tru(findprog_flag);
+                }
+                else if (f2("-l", "--latest")) {
+                    // update latest
+                    tru(l_flag);
+                }
+                else if (f2("-u", "--update")) {
+                    // update specified
+                    tru(u_flag);
+                }
+                else if (f1("--no-config")) {
+                    // store no configs except those on command line
+                    tru(noconf_flag);
+                }
+                else if (f1("--no-packages")) {
+                    // store no packages locally
+                    tru(nopack_flag);
+                }
+                else if (f2("-v", "--verbose")) {
+                    // verbose output
+                    tru(v_flag);
+                }
+                else if (f1("--silent")) {
+                    // run silently (no output)
+                    tru(silent_flag);
+                }
+                else {
+                    if (this->verbose()) std::cerr << "Ignoring unsupported flag: " << argv << std::endl << "\t Use the -h or --help flags for usage." << std::endl;
+                }
+            } 
+            #undef f1
+            #undef f2
+            #undef tru
+            #undef fal
+            #undef is_f
+        }
+ 
+        #define flag(x) this->_flags[x]
+        // public getters and setters
+        int mode() const { return this->_mode; }
+        std::deque<char*> incl_pkgs() const { return this->_i_packages; }
+        std::deque<char*> excl_pkgs() const { return this->_e_packages; }
+        std::deque<char*> incl_confs() const { return this->_i_config; }
+        std::deque<char*> excl_confs() const { return this->_e_config; }
+        std::deque<char*> temp_settings() const { return this->_temp_set; }
+        std::deque<char*> write_settings() const { return this->_write_set; }
+        
+        // to test individual flags
+        bool help() const { return flag(h_flag); }
+        bool i_confs() const { return flag(c_flag); }
+        bool e_confs() const { return flag(x_flag); }
+        bool i_pkgs() const { return flag(p_flag); }
+        bool e_pkgs() const { return flag(e_flag); }
+        bool offline() const { return flag(offline_flag); }
+        bool set_temp() const { return flag(s_flag); }
+        bool find_conf() const { return flag(f_flag); }
+        bool find_prog() const { return flag(findprog_flag); }
+        bool latest() const { return flag(l_flag); }
+        bool update() const { return flag(u_flag); }
+        bool no_confs() const { return flag(noconf_flag); }
+        bool no_pkgs() const { return flag(nopack_flag); }
+        bool verbose() const { return flag(v_flag); }
+    
+    private:
+        int _mode;
+        bool _flags[NUM_FLAGS];
+        char* location;
+        std::deque<char*> _i_packages, _e_packages, _i_config, _e_config, _temp_set, _write_set;
+};
+#endif

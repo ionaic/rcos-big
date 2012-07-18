@@ -1,0 +1,13 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in, paperheight=11in, paperwidth=8.5]{geometry}
+
+\title{big TODO list and proposed additions}
+
+\begin{document}
+    \begin{enumerate}
+        \item Complete basic features (bang from file, crunch to file, grab known configs from system, search for configs based on program prefix e.g. vim is installed, look for vim*, read config file and change execution based on that i.e. include and exclude).
+        \item Different built in options for the config file such as exclude family xserver (to exclude family of packages) vs. exclude package suckless_tools or something which just excludes the one as well as things like exclude_window_managers or exclude_X_all to exclude window manager related packages/configs or X related packages respectively.  Include/exclude should override with increased specificity (i.e. if they say include this package, it overrides exclude this family)
+        \item Extensibility: allow users to add on to the existing program without needing to fork the project or mess with the source.
+    \end{enumerate}
+\end{document}

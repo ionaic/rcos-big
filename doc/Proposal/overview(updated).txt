@@ -1,0 +1,1 @@
+Similar to cmake, but for configurations.  A configuration generator.  See proposals for more detail, but they need to be updated to reflect the former ideas.

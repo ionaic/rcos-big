@@ -1,0 +1,3 @@
+Title: Moving right along.
+
+Text: I have an up and running version of the code that will grab everything from dpkg and dump it into a shell script which, when run, will install every package.  This utilizes the popen command to pipe the output from dpkg -l to the program, filter the packages a bit (remove things like apt and xserver and such unless user specifies otherwise) and write this to the script.  

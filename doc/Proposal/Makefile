@@ -1,0 +1,3 @@
+all: 
+pdflatex Proposal.tex
+
