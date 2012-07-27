@@ -38,13 +38,8 @@ int filterPackages(std::deque<char*> &packages, char** includes, int num_include
         for (int j = 0; j < num_excludes; j++) {
             char* temp;
             char* format;
-
-            // format is for sscanf, should be the package name and then %s
-            // to catch things like gnome-keyring by scanning for gnome%s
             strcpy(format, includes[j]);
-            strcat(format, "%s");
-
-            sscanf(packages[i], format, temp);
+            sscanf(packages[i], "%s", temp);
         }
     }
     return 6;

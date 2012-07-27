@@ -24,18 +24,26 @@ std::deque<std::string> parseTags(std::string input) {
         std::string temp;
         while (instream >> temp) {
             char out[32];
-            sscanf(out, "<%s>", temp);
-            if (out[0] == '/') {
-                // closing tag
-            }
+            // sscanf(out, "<%s>", temp);
+            // if (out[0] == '/') {
+            //     // closing tag
+            // }
             char temp2[32];
-            // how to handle singleton tags?
-            else if (sscanf(temp2, "%s/", out) == 0) {
-                // singleton tag
+            if (sscanf(out, "<%s/>", temp)) {
+                // a singleton tag
             }
-            else if () {
+            // how to handle singleton tags?
+            // else if (sscanf(temp2, "%s/", out) == 0) {
+            //     // singleton tag
+            // }
+            else if (sscanf(out, "</%s>", temp)) {
+
+            }
+            else if (sscanf(out, "<%s>", temp)) {
                 // start tag
-                
+            }
+            else {
+                // random content such as <tag>thing</tag>
             }
         }
     }
@@ -44,18 +52,18 @@ std::deque<std::string> parseTags(std::string input) {
 
 //std::string makeTag(
 
-class XMLTreeNode {
-    public:
-        void addChild(XMLTreeNode* child) {
-            _children.push_back(child);
-        }
-    private:
-        std::deque<XMLTreeNode*> _children;
-        std::string tag;
-        void* value;
-}
-
-class XMLTree {
-    private: 
-      XMLTreeNode _root;
-}
+// class XMLTreeNode {
+//     public:
+//         void addChild(XMLTreeNode* child) {
+//             _children.push_back(child);
+//         }
+//     private:
+//         std::deque<XMLTreeNode*> _children;
+//         std::string tag;
+//         void* value;
+// };
+// 
+// class XMLTree {
+//     private: 
+//       XMLTreeNode _root;
+// };
