@@ -31,4 +31,8 @@ public class Manifest {
                 } 
             }
         }
-}
+ 
+        void writeManifest(std::deque<Entry> entries) {
+            
+        }
+};
