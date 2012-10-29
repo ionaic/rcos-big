@@ -3,7 +3,7 @@
 //#include <cstdlib.h>
 #define MANI_BUFF
 
-public class Manifest {
+class Manifest {
     public:
         void parseManifest() {
             FILE *manifest = fopen("big.manifest", "r");
