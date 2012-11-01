@@ -11,10 +11,12 @@ NAME=../bin/big
 all: $(SOURCES) $(NAME)
 
 $(NAME): $(OBJECTS) 
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	# $(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) -o $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDEFLAGS) $< -o $@
+	# $(CC) $(CFLAGS) $(INCLUDEFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	rm -rf $(OBJECTS)
